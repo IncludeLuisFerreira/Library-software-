@@ -24,3 +24,12 @@ int User::getId() const {
     return id;
 }
 
+void User::setCanLoan(bool state) {
+    canLoan = state;
+}
+
+bool User::userCanLoan(){
+    return canLoan == true;
+}
+
+

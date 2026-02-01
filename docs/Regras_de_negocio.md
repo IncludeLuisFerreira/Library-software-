@@ -6,7 +6,7 @@
 - Um livro pode estar disponível ou emprestado
 - Um livro não pode ter mais de um empréstimo ativo
 
-### Usuário
+### Usuário - Aluno
 - Usuário possui ID único
 - Usuário pode ter até 3 empréstimos ativos
 

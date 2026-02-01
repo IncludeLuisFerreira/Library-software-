@@ -9,15 +9,22 @@ class User {
         std::string name;
         int activeLoans = 0;
 
+        bool canLoan;
+
     public:
+        // CONSTRUCTORS
         User(int id, const std::string& name);
         
-        int getActiveLoans() const;
         void incrementLoans();
         void decrementLoans();
         
-
+        void setCanLoan(bool state);
+        bool userCanLoan();
+        
+        // GETTERS
+        int getActiveLoans() const;
         int getId() const;
+
 };
 
 #endif

@@ -12,13 +12,15 @@ using namespace std;
 class Library {
 
 private:
-    string name;
-    string address;
-    vector<Book> books;
-    vector<User> users;
-    vector<Loan> loans;
-    
+vector<Book> books;
+vector<User> users;
+vector<Loan> loans;
+int nextLoanId = 1;
+
+
 public:
+string name;
+string address;
 
 /*********************************** CONSTRUCTORS ***********************************/
 
@@ -28,8 +30,6 @@ public:
    
    Library(string name, string address, vector<Book> books, vector<User> users);
 
-   Library(string name, string address, vector<Book> books, vector<User> users, vector<Loan> loans);
-
 /************************************************************************************/
 
  /*********************************** BOOK MANAGER ***********************************/
@@ -37,7 +37,7 @@ public:
     /// @brief Add a new book to vectir
     /// @param book 
     /// @return True if sucessed or false if has ocurred an error
-    void addBook(Book&book);
+    void addBook(const Book&book);
 
     /// @brief Remove a book from the vector
     /// @param id_book id of the book
@@ -57,6 +57,9 @@ public:
     string ListAllBooks();
     
     string toString();
+
+    void rectifyOverdueLoan(int loanId);
+
 
 private:
     Book& findBook(int bookId);

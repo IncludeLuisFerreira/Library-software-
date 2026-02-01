@@ -2,10 +2,11 @@
 #include "Book.h"
 #include "User.h"
 #include <stdexcept>
+#include <chrono>
 #include <ctime>
 
-Loan::Loan(Book& book, User& user)
-    : book(book), user(user), status(LoanStatus::Active)
+Loan::Loan(int id, Book& book, User& user)
+    : id(id), book(book), user(user), status(LoanStatus::Active)
 {
     if (!book.isAvailable())
         std::logic_error("Book already loaned");
@@ -15,6 +16,8 @@ Loan::Loan(Book& book, User& user)
 
     book.markAsLoaned();    // teria que diminur a quantidae de copias
     user.incrementLoans();  // Seria legal a tela do usuario sabendo quais sao os livros
+
+    return_date = chrono::system_clock::now()  + chrono::hours(24 * 7);
     status = LoanStatus::Active;
 }
 
@@ -23,49 +26,56 @@ void Loan::finish() {
         // throw exception
 
     book.marKAsReturned();
+    user.decrementLoans();
     status = LoanStatus::Finished;
 }
 
-Loan::Date Loan::GetDateNow() {
-    time_t now = time(nullptr);
-    tm *local = localtime(&now);
-    
-    int day = local->tm_mday;
-    int month = local->tm_mon + 1;
-    int year = local->tm_year + 1900;
-
-    Date date = {
-        .day = day,
-        .month = month,
-        .year = year
-    };
-
-    return date;
+auto Loan::GetDateNow() {
+    return chrono::system_clock::now();
 }
 
 bool Loan::isActive() const {
     return status == LoanStatus::Active;
 }
 
+
 int Loan::getId() const {
     return id;
 }
 
-Loan::Date Loan::GetReturnDate() {
+auto Loan::GetReturnDate() {
     return return_date;
 }
 
-bool Loan::UpdateReturnDate(Date new_return_Date) {
-    if (isExpired())
+Book& Loan::getBook() const {
+    return book;
+}
+
+User& Loan::getUser() const {
+    return user;
+}
+
+bool Loan::UpdateReturnDate() {
+    if (isOverdue())
         return false;
     
-    return_date = new_return_Date;
+    return_date = chrono::system_clock::now()  + chrono::hours(24 * 7);  
     return true;
 }
 
-bool Loan::isExpired() {
-    Date date = GetDateNow();
-    
-    return date.day > return_date.day && date.month > return_date.month;
+bool Loan::isOverdue() {
+    return status == LoanStatus::Overdue;
 }
+
+
+void Loan::updateLoanStatus() {
+    auto now = chrono::system_clock::now();
+    if (now > return_date)
+        status == LoanStatus::Overdue;
+}
+
+void Loan::setStatus(LoanStatus loanStatus) {
+    status = loanStatus;
+}
+
 

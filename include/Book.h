@@ -8,22 +8,22 @@ using namespace std;
 
 class Book {
 
-    public:
+private:
         int id;
+        int total_copies;
+        int available_copies;
+        string isbn; 
 
+public:
         string book_name;
         string author_name;
-        unsigned int publication_year;
-        unsigned int total_copies;
-        unsigned int available_copies;
-        string isbn; 
+        int publication_year;
         string gender;
         
-        Book(string bookName, string authorName, unsigned int publicationYear, unsigned int availablaCopies);
+        Book(int id, string bookName, string authorName, unsigned int publicationYear, unsigned int availablaCopies);
 
 
         // SETTERS AND GETTERS
-
         void SetBookName(string book_name);
         void SetAuthorName(string author_name);
         void SetPublicationYear(unsigned int publication_year);
@@ -33,16 +33,16 @@ class Book {
         int getId() const;
         string GetBookName();
         string GetAuthorName();
-        unsigned int GetPublicationYear();
-        unsigned int GetTotalCopies();
-        unsigned int GetAvailablesCopies();
+        int GetPublicationYear();
+        int GetTotalCopies();
+        int GetAvailablesCopies();
 
         
         bool isAvailable() const;
         void markAsLoaned();
         void marKAsReturned();
 
-    private:
+private:
         bool available;
 };
 

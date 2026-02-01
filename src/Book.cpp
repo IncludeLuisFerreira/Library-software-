@@ -2,32 +2,32 @@
 #include <stdexcept>
 
 
-Book::Book(string book_name, string author_name, unsigned int publication_year,
-    unsigned int copies) : available(true) 
+Book::Book(int id, string book_name, string author_name, unsigned int publication_year,
+    unsigned int copies) 
+    : id(id),
+      book_name(book_name), author_name(author_name),
+      publication_year(publication_year), total_copies(copies),
+      available_copies(copies)
 {
-    this->book_name = book_name;
-    this->author_name = author_name;
-    this->publication_year = publication_year;
-    this->total_copies = copies;
+    if (copies <= 0)
+        std::logic_error("Book must have at least one copy");
 }
 
+
 bool Book::isAvailable() const {
-    return available == true;
+    return available_copies > 0;
 }
 
 void Book::markAsLoaned() {
     if (!isAvailable())
-        throw std::logic_error("Invalid book state");
+        throw std::logic_error("Do not have copies");
 
-    available = false;
     available_copies--;
 }
 
 void Book::marKAsReturned() {
-    if (isAvailable())
-        throw std::logic_error("Invalid book state");
-
-    available = true;
+    if (GetAvailablesCopies() >= total_copies)
+        throw std::logic_error("This book is not cotaloged");
     available_copies++;
 }
 
@@ -60,10 +60,14 @@ string Book::GetAuthorName() {
     return this->author_name;
 }
 
-unsigned int Book::GetPublicationYear() {
+ int Book::GetPublicationYear() {
     return this->publication_year;
 }
 
-unsigned int Book::GetTotalCopies() {
+ int Book::GetTotalCopies() {
     return this->total_copies;
+}
+
+int Book::GetAvailablesCopies() {
+    return available_copies;
 }
